@@ -1,14 +1,18 @@
 # react-native-open-settings
 
-[![npm
-version](https://badge.fury.io/js/react-native-open-settings@2x.png)](http://badge.fury.io/js/react-native-open-settings)
-
-Open your apps settings in the Settings app :P
-
 ## Install
+
+### YARN
 ```
-npm install react-native-open-settings
+yarn add https://github.com/OurCnC/react-native-open-settings
 ```
+
+### NPM
+```
+npm i -S https://github.com/OurCnC/react-native-open-settings
+```
+
+## Linking (for React Native <= 0.59 only, React Native >= 0.60 skip this as auto-linking should work)
 
 ### iOS
 Add `React Native Open Settings` to project libraries.
