@@ -3,13 +3,18 @@ package com.opensettings;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.Settings;
+import android.os.Build;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.module.annotations.ReactModule;
 
+@ReactModule(name = OpenSettings.MODULE_NAME)
 public class OpenSettings extends ReactContextBaseJavaModule {
+
+    static final String MODULE_NAME = "RNOpenSettings";
 
     private ReactContext reactContext;
 
@@ -20,20 +25,31 @@ public class OpenSettings extends ReactContextBaseJavaModule {
 
     @Override
     public String getName() {
-        return "RNOpenSettings";
+        return this.MODULE_NAME;
     }
 
     //region React Native Methods
     @ReactMethod
     public void openSettings() {
-        final Intent i = new Intent();
-        i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-        i.addCategory(Intent.CATEGORY_DEFAULT);
-        i.setData(Uri.parse("package:" + reactContext.getPackageName()));
-        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-        i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-        reactContext.startActivity(i);
+        Intent intent = new Intent();
+        i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);	        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.addCategory(Intent.CATEGORY_DEFAULT);	        //above android 8.0 jump to notification channels
+        i.setData(Uri.parse("package:" + reactContext.getPackageName()));	        if (Build.VERSION.SDK_INT >= 26) {
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);	            intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
+        i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);	            intent.putExtra("android.provider.extra.APP_PACKAGE", reactContext.getPackageName());
+        i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);	        }
+        reactContext.startActivity(i);	        //android 5.0-7.0 notification settings
+        if (Build.VERSION.SDK_INT >= 21 && Build.VERSION.SDK_INT < 26) {
+            intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
+            intent.putExtra("app_package", reactContext.getPackageName());
+            intent.putExtra("app_uid", reactContext.getApplicationInfo().uid);
+        }
+        //others
+        if (Build.VERSION.SDK_INT < 21) {
+            intent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+            intent.setData(Uri.fromParts("package", reactContext.getPackageName(), null));
+        }
+        reactContext.startActivity(intent);
     }
     //endregion
 }
