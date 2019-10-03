@@ -9,7 +9,8 @@
   "keywords": [
     "react-native"
   ],
-  "author": "Michael Morrissey",
+  "author": "Ivan Sarokin",
   "license": "ISC",
-  "repository": "https://github.com/lunarmayor/react-native-open-settings"
+  "repository": "https://github.com/OurCnC/react-native-open-settings",
+  "homepage": "https://github.com/OurCnC/react-native-open-settings#readme"
 }
