@@ -32,13 +32,13 @@ public class OpenSettings extends ReactContextBaseJavaModule {
     @ReactMethod
     public void openSettings() {
         Intent intent = new Intent();
-        i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);	        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        i.addCategory(Intent.CATEGORY_DEFAULT);	        //above android 8.0 jump to notification channels
-        i.setData(Uri.parse("package:" + reactContext.getPackageName()));	        if (Build.VERSION.SDK_INT >= 26) {
-        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);	            intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
-        i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);	            intent.putExtra("android.provider.extra.APP_PACKAGE", reactContext.getPackageName());
-        i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);	        }
-        reactContext.startActivity(i);	        //android 5.0-7.0 notification settings
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        //above android 8.0 jump to notification channels
+        if (Build.VERSION.SDK_INT >= 26) {
+            intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
+            intent.putExtra("android.provider.extra.APP_PACKAGE", reactContext.getPackageName());
+        }
+        //android 5.0-7.0 notification settings
         if (Build.VERSION.SDK_INT >= 21 && Build.VERSION.SDK_INT < 26) {
             intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
             intent.putExtra("app_package", reactContext.getPackageName());
